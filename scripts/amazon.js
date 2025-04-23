@@ -1,4 +1,5 @@
 //well create an array to contain an array of objects each of which representing a product
+/*
 const products = [{
   image : 'images/products/athletic-cotton-socks-6-pairs.jpg',
   name :'Black and Gray Athletic Cotton Socks - 6 Pairs',
@@ -25,10 +26,22 @@ const products = [{
     count:56
   },
   priceInCents:799
+},
+{
+  image:'images/products/black-2-slot-toaster.jpg',
+  name:' 2 Slot Toaster-black',
+  rating:{
+    stars:5,
+    count:2197
+  },
+  priceInCents:1899
 }
+
 ];
+*/
 
 
+//we will just get the products array from the json file 
 let productsHTML = ' ';
 //we multiply the rating by 10 to get the actual rating in the image
 products.forEach((product)=>{
@@ -51,7 +64,7 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-price">
-          $${(product.priceInCents/100).toFixed(2)}
+          $${(product.priceCents/100).toFixed(2)}
           </div>
 
           <div class="product-quantity-container">
