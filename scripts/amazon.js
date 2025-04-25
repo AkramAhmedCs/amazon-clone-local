@@ -1,4 +1,5 @@
 import {cart} from '../data/cart.js';
+import {products} from '../data/products.js';
 // u can rename the import to whatever u want ex importing cart as myCart
 //with modules u dont have to worry about the order of the script tags in the html file
 //well create an array to contain an array of objects each of which representing a product
