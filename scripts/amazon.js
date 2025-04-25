@@ -1,4 +1,4 @@
-import {cart} from '../data/cart.js';
+import {cart,addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 // u can rename the import to whatever u want ex importing cart as myCart
 //with modules u dont have to worry about the order of the script tags in the html file
@@ -100,31 +100,20 @@ products.forEach((product)=>{
         </div>`;
 
 });
-
-
+//moved add to cart function to the cart file sice it is related to the cart
+function updateCartQuantity(){
+  let cartQuantity = 0;
+  cart.forEach((Cartitem)=>{
+    cartQuantity += Cartitem.quantity;
+  })
+  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+ 
+}
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 document.querySelectorAll('.js-add-to-cart').forEach((button) =>{
   button.addEventListener('click',()=>{
    const productID = button.dataset.productId;
-    let matchingItem;
-   cart.forEach((item)=>{
-    if(item.productID === productID){
-      matchingItem = item;
-    }
-   });
-  if(matchingItem){
-    matchingItem.quantity++;
-  }else{
-    cart.push({productID:productID,
-      quantity:1
-    });
-  }
-
-  let cartQuantity = 0;
-  cart.forEach((item)=>{
-    cartQuantity += item.quantity;
-  })
-  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
- 
+    addToCart(productID);
+    updateCartQuantity();
     });
        });
