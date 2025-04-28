@@ -17,7 +17,7 @@ cart.forEach((cartItem) => {
   // instead of saying option 1 each time in the buttons for the delivery ,we'll use the product id sicne its unique k
   cartSummarayHTML += 
   `
-  <div class="cart-item-container">
+  <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
             <div class="delivery-date">
               Delivery date: Tuesday, June 21
             </div>
@@ -102,5 +102,11 @@ deleteLinks.forEach((link)=>{
     const prouctID = link.dataset.productId;
     // we'll use the removeFromCart function from the cart.js file to remove the item from the cart
     removeFromCart(prouctID);
+    const container = document.querySelector(`.js-cart-item-container-${prouctID}`);
+    console.log(container);
+    container.remove();
+
+      //every item from the dom has the remove method which removes the item from the dom
+
   })
 })
