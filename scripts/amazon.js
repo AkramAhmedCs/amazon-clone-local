@@ -1,4 +1,4 @@
-import {cart,addToCart} from '../data/cart.js';
+import {cart,addToCart, calculateCartQuantity} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatMoney } from './utils/money.js';
 // u can rename the import to whatever u want ex importing cart as myCart
@@ -102,19 +102,18 @@ products.forEach((product)=>{
 
 });
 //moved add to cart function to the cart file sice it is related to the cart
-function updateCartQuantity(){
-  let cartQuantity = 0;
-  cart.forEach((Cartitem)=>{
-    cartQuantity += Cartitem.quantity;
-  })
-  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
- 
-}
+
+  
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
+updateCartQuantityDisplay();
 document.querySelectorAll('.js-add-to-cart').forEach((button) =>{
   button.addEventListener('click',()=>{
    const productID = button.dataset.productId;
     addToCart(productID);
-    updateCartQuantity();
+        updateCartQuantityDisplay();
     });
-       });
+});
+ function updateCartQuantityDisplay() {
+  const quantity = calculateCartQuantity();
+  document.querySelector('.js-cart-quantity').innerHTML = quantity;
+}
