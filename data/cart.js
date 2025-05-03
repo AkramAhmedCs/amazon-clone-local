@@ -62,3 +62,19 @@ if(matchingItem){
   saveToStorage();
 }
 }
+export function updateDeliveryOption(productID,deliveryOptionId){
+  let matchingItem;
+  cart.forEach((cartItem)=>{
+    if(cartItem.productID ===productID){
+      matchingItem = cartItem;
+    }
+  });
+  if(matchingItem){
+    matchingItem.deliveryOptionId = deliveryOptionId;
+    saveToStorage();
+  }
+  else{
+    console.log('product not found')
+  }
+  
+}

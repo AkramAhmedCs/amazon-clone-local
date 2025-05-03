@@ -1,4 +1,4 @@
-import { cart, removeFromCart,calculateCartQuantity,updateQuantity } from "../data/cart.js";
+import { cart, removeFromCart,calculateCartQuantity,updateQuantity,updateDeliveryOption } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatMoney } from "./utils/money.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
@@ -20,12 +20,13 @@ cart.forEach((cartItem) => {
   const deliveryOptionId = cartItem.deliveryOptionId;
   let deliveryOption;
   deliveryOptions.forEach((option)=>{
-    if (option.id === deliveryOptionId){
+    if (option.id == deliveryOptionId){
       deliveryOption = option;
     }
   });
-  getDate(deliveryOption);
-  const dateString = getDate(deliveryOption);
+  const today = dayjs();
+  const deliveryDate = today.add(deliveryOption.deliveryDays,'day');
+  const dateString = deliveryDate.format('dddd, MMMM D');
   // instead of saying option 1 each time in the buttons for the delivery ,we'll use the product id sicne its unique 
   cartSummarayHTML += 
   `
@@ -74,13 +75,16 @@ cart.forEach((cartItem) => {
 function deliveryOptionsHtml(matchingProduct,cartItem) {
   let html = '';
   deliveryOptions.forEach((deliveryOption)=>{
-  getDate(deliveryOption);
-   let dateString = getDate(deliveryOption);
+    const today = dayjs();
+    const deliveryDate = today.add(deliveryOption.deliveryDays,'day');
+    const dateString = deliveryDate.format('dddd, MMMM D');
     const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `$${formatMoney(deliveryOption.priceCents)} -`;
     //ternary operator if the delivery option is free then it will be free otherwise it will be the price of the delivery option
     const isChecked = deliveryOption.id === cartItem.deliveryOptionId ;
     html += `
-        <div class="delivery-option">
+        <div class="delivery-option js-delivery-option"
+        data-product-id="${matchingProduct.id}"
+        data-product-delivery-option-id="${deliveryOption.id}">
           <input type="radio"
           ${isChecked ? 'checked' : ''}
             class="delivery-option-input"
@@ -141,11 +145,16 @@ function updateCartQuantityDisplay() {
   const quantity = calculateCartQuantity();
   document.querySelector('.js-checkout-header-middle-section').innerHTML = `Checkout: (${quantity} items)`;
 }
-function getDate(deliveryOption) {
-  const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays,'day');
-    const dateString = deliveryDate.format('dddd, MMMM D');
-    return dateString;
-}
-
-
+//function getDate(deliveryOption) {
+ //const today = dayjs();
+ // const deliveryDate = today.add(deliveryOption.deliveryDays,'day');
+ // const dateString = deliveryDate.format('dddd, MMMM D');
+ // return dateString;
+//}
+document.querySelectorAll('.js-delivery-option').forEach(element => {
+  element.addEventListener('click', () => {
+    const productID = element.dataset.productId;
+    const deliveryOptionId = element.dataset.productDeliveryOptionId;
+    updateDeliveryOption(productID, deliveryOptionId);
+  });
+});
