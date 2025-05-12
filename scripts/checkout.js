@@ -7,6 +7,7 @@ const today = dayjs();
 const deliveryDate = today.add(7,'day')
 console.log(deliveryDate.format('dddd, MMMM D'));
 //we used 1 dot because we are in the same folder 
+function renderOrderSummary(){
 let cartSummarayHTML = '';
 cart.forEach((cartItem) => {
   const productID = cartItem.productID;
@@ -141,10 +142,7 @@ saveLinks.forEach(((link)=>{
 
   })
 }))
-function updateCartQuantityDisplay() {
-  const quantity = calculateCartQuantity();
-  document.querySelector('.js-checkout-header-middle-section').innerHTML = `Checkout: (${quantity} items)`;
-}
+
 //function getDate(deliveryOption) {
  //const today = dayjs();
  // const deliveryDate = today.add(deliveryOption.deliveryDays,'day');
@@ -156,5 +154,12 @@ document.querySelectorAll('.js-delivery-option').forEach(element => {
     const productID = element.dataset.productId;
     const deliveryOptionId = element.dataset.productDeliveryOptionId;
     updateDeliveryOption(productID, deliveryOptionId);
+    renderOrderSummary();
   });
 });
+}
+function updateCartQuantityDisplay() {
+  const quantity = calculateCartQuantity();
+  document.querySelector('.js-checkout-header-middle-section').innerHTML = `Checkout: (${quantity} items)`;
+}
+renderOrderSummary();
