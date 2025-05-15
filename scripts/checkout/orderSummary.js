@@ -4,9 +4,7 @@ import { formatMoney } from "../utils/money.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions ,getDeliveryOption} from "../../data/deliveryOptions.js";
 import { rednderPaymentSummary } from "./paymentSummary.js";
-const today = dayjs();
-const deliveryDate = today.add(7,'day')
-console.log(deliveryDate.format('dddd, MMMM D'));
+
 //we used 1 dot because we are in the same folder 
 export function renderOrderSummary(){
 let cartSummarayHTML = '';
