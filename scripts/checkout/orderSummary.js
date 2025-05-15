@@ -3,6 +3,7 @@ import { products,getProduct } from "../../data/products.js";
 import { formatMoney } from "../utils/money.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions ,getDeliveryOption} from "../../data/deliveryOptions.js";
+import { rednderPaymentSummary } from "./paymentSummary.js";
 const today = dayjs();
 const deliveryDate = today.add(7,'day')
 console.log(deliveryDate.format('dddd, MMMM D'));
@@ -104,6 +105,7 @@ deleteLinks.forEach((link)=>{
     const container = document.querySelector(`.js-cart-item-container-${prouctID}`);
     console.log(container);
     container.remove();
+    rednderPaymentSummary();
     updateCartQuantityDisplay();
       //every item from the dom has the remove method which removes the item from the dom
 
@@ -129,6 +131,7 @@ saveLinks.forEach(((link)=>{
     updateCartQuantityDisplay();
     const quantityLabel = document.querySelector('.js-quantity-label');
     quantityLabel.innerHTML = inputQuantity;
+    rednderPaymentSummary();
 
   })
 }))
@@ -145,6 +148,7 @@ document.querySelectorAll('.js-delivery-option').forEach(element => {
     const deliveryOptionId = element.dataset.productDeliveryOptionId;
     updateDeliveryOption(productID, deliveryOptionId);
     renderOrderSummary();
+    rednderPaymentSummary();
   });
 });
 }

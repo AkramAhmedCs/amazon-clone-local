@@ -38,14 +38,14 @@ export function rednderPaymentSummary(){
           <div class="payment-summary-row subtotal-row">
             <div>Total before tax:</div>
             <div class="payment-summary-money">$
-            ${totalBeforeTax}
+            ${formatMoney(totalBeforeTax)}
             </div>
           </div>
 
           <div class="payment-summary-row">
             <div>Estimated tax (10%):</div>
             <div class="payment-summary-money">$
-            ${taxCents}
+            ${formatMoney(taxCents)}
             </div>
           </div>
 
