@@ -4,7 +4,7 @@ import { formatMoney } from "../utils/money.js";
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions ,getDeliveryOption} from "../../data/deliveryOptions.js";
 import { rednderPaymentSummary } from "./paymentSummary.js";
-
+import { calculateDeliveryDate } from "../utils/deliveryOptipns.js";
 //we used 1 dot because we are in the same folder 
 export function renderOrderSummary(){
 let cartSummarayHTML = '';
@@ -14,9 +14,9 @@ cart.forEach((cartItem) => {
 
   const deliveryOptionId = cartItem.deliveryOptionId;
   const deliveryOption = getDeliveryOption(deliveryOptionId)
-  const today = dayjs();
-  const deliveryDate = today.add(deliveryOption.deliveryDays,'day');
-  const dateString = deliveryDate.format('dddd, MMMM D');
+  //const today = dayjs();
+  //const deliveryDate = today.add(deliveryOption.//deliveryDays,'day');
+  const dateString = calculateDeliveryDate(deliveryOption);
   // instead of saying option 1 each time in the buttons for the delivery ,we'll use the product id sicne its unique 
   cartSummarayHTML += 
   `
@@ -65,9 +65,8 @@ cart.forEach((cartItem) => {
 function deliveryOptionsHtml(matchingProduct,cartItem) {
   let html = '';
   deliveryOptions.forEach((deliveryOption)=>{
-    const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays,'day');
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    
+    const dateString = calculateDeliveryDate(deliveryOption);
     const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `$${formatMoney(deliveryOption.priceCents)} -`;
     //ternary operator if the delivery option is free then it will be free otherwise it will be the price of the delivery option
     const isChecked = deliveryOption.id === cartItem.deliveryOptionId ;
@@ -100,9 +99,10 @@ deleteLinks.forEach((link)=>{
     const prouctID = link.dataset.productId;
     // we'll use the removeFromCart function from the cart.js file to remove the item from the cart
     removeFromCart(prouctID);
-    const container = document.querySelector(`.js-cart-item-container-${prouctID}`);
-    console.log(container);
-    container.remove();
+    //const container = document.querySelector(`.js-cart-item-container-${prouctID}`);
+    //console.log(container);
+    //container.remove();
+    renderOrderSummary();
     rednderPaymentSummary();
     updateCartQuantityDisplay();
       //every item from the dom has the remove method which removes the item from the dom
@@ -126,9 +126,10 @@ saveLinks.forEach(((link)=>{
     const container = document.querySelector(`.js-cart-item-container-${productID}`);
     container.classList.remove('is-editing-quantity');
     updateQuantity(productID,Number(inputQuantity));
+    renderOrderSummary();
     updateCartQuantityDisplay();
-    const quantityLabel = document.querySelector('.js-quantity-label');
-    quantityLabel.innerHTML = inputQuantity;
+    //const quantityLabel = document.querySelector('.js-quantity-label');
+    //quantityLabel.innerHTML = inputQuantity;
     rednderPaymentSummary();
 
   })

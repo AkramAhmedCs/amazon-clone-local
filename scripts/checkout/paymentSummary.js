@@ -1,4 +1,4 @@
-import { cart } from "../../data/cart.js"
+import { cart,calculateCartQuantity } from "../../data/cart.js"
 import { getProduct } from "../../data/products.js"
 import { getDeliveryOption } from "../../data/deliveryOptions.js";
 import { formatMoney } from "../utils/money.js";
@@ -22,7 +22,7 @@ export function rednderPaymentSummary(){
           </div>
 
           <div class="payment-summary-row">
-            <div>Items (3):</div>
+            <div class = 'js-items'>Items (3):</div>
             <div class="payment-summary-money">$
             ${formatMoney(productPriceCents)}
             </div>
@@ -61,4 +61,13 @@ export function rednderPaymentSummary(){
           </button>`;
 
           document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHtml;
+          updateCartQuantityDisplay();
+}
+function updateCartQuantityDisplay() {
+  const quantity = calculateCartQuantity();
+  if(quantity===0){
+      document.querySelector('.js-items').innerHTML = `Your cart is empty`;
+
+  }else{
+  document.querySelector('.js-items').innerHTML = `Items(${quantity}):`;}
 }
