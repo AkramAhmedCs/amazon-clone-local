@@ -20,7 +20,9 @@ cart.forEach((cartItem) => {
   // instead of saying option 1 each time in the buttons for the delivery ,we'll use the product id sicne its unique 
   cartSummarayHTML += 
   `
-  <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
+  <div class="cart-item-container
+  js-cart-item-container 
+  js-cart-item-container-${matchingProduct.id}">
             <div class="delivery-date">
               Delivery date: ${dateString}
             </div>
@@ -36,7 +38,8 @@ cart.forEach((cartItem) => {
                 <div class="product-price">
                   $${formatMoney(matchingProduct.priceCents)}
                 </div>
-                <div class="product-quantity">
+                <div class="product-quantity
+                  js-product-quantity-${matchingProduct.id}">
                   <span>
                     Quantity: <span class="quantity-label  js-quantity-label">${cartItem.quantity}</span>
                   </span>
@@ -45,7 +48,7 @@ cart.forEach((cartItem) => {
                   </span>
                   <input class = "quantity-input link-primary"></input>
                   <span class = "save-quantity-link link-primary" data-product-id="${matchingProduct.id}">Save</span>
-                  <span class="delete-quantity-link link-primary js-delete-quantity-link " data-product-id="${matchingProduct.id}">
+                  <span class="delete-quantity-link js-delete-link-${matchingProduct.id} link-primary js-delete-quantity-link " data-product-id="${matchingProduct.id}">
                     Delete
                   </span>
                 </div>
