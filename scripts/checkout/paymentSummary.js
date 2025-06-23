@@ -23,7 +23,7 @@ export function rednderPaymentSummary(){
 
           <div class="payment-summary-row">
             <div class = 'js-items'>Items (3):</div>
-            <div class="payment-summary-money">$
+            <div class="payment-summary-money js-payment-summary">$
             ${formatMoney(productPriceCents)}
             </div>
           </div>

@@ -32,10 +32,10 @@ cart.forEach((cartItem) => {
                 src="${matchingProduct.image}">
 
               <div class="cart-item-details">
-                <div class="product-name">
+                <div class="product-name js-product-name-${matchingProduct.id}">
                   ${matchingProduct.name}
                 </div>
-                <div class="product-price">
+                <div class="product-price js-product-price">
                   $${formatMoney(matchingProduct.priceCents)}
                 </div>
                 <div class="product-quantity
@@ -74,12 +74,16 @@ function deliveryOptionsHtml(matchingProduct,cartItem) {
     //ternary operator if the delivery option is free then it will be free otherwise it will be the price of the delivery option
     const isChecked = deliveryOption.id === cartItem.deliveryOptionId ;
     html += `
-        <div class="delivery-option js-delivery-option"
+        <div class="delivery-option js-delivery-option
+        js-delivery-optionTest${matchingProduct.id,deliveryOption.id}
+        "
         data-product-id="${matchingProduct.id}"
         data-product-delivery-option-id="${deliveryOption.id}">
           <input type="radio"
           ${isChecked ? 'checked' : ''}
-            class="delivery-option-input"
+            class="delivery-option-input
+            js-delivery-option-input${matchingProduct.id,deliveryOption.id}
+            "
             name="delivery-option-${matchingProduct.id}">
           <div>
             <div class="delivery-option-date">

@@ -1,5 +1,7 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
 import { loadFromStorage, cart } from "../../data/cart.js";
+import { rednderPaymentSummary } from "../../scripts/checkout/paymentSummary.js"; 
+
 
 describe('Test suite: render order summary ', () => {
   // Define productId1 and productId2 in the scope of the describe block
@@ -32,12 +34,15 @@ describe('Test suite: render order summary ', () => {
     // Load from storage and render the summary
     loadFromStorage();
     renderOrderSummary();
+    rednderPaymentSummary();
+
   });
 
-  // Clean up the DOM after each test (good practice!)
-  afterEach(() => {
-    document.querySelector('.js-test-container').innerHTML = '';
-  });
+  // Clean up the DOM after each test
+ 
+  
+
+  
 
   it('displays the cart', () => {
     expect(
@@ -51,6 +56,7 @@ describe('Test suite: render order summary ', () => {
     expect(
       document.querySelector(`.js-product-quantity-${productId2}`).innerText
     ).toContain('Quantity: 1');
+    expect(document.querySelector(`.js-product-name-${productId1}`).innerText).toEqual('Black and Gray Athletic Cotton Socks - 6 Pairs')
   });
 
   it('removes a product', () => {
@@ -67,5 +73,29 @@ describe('Test suite: render order summary ', () => {
     ).not.toEqual(null);
     expect(cart.length).toEqual(1);
     expect(cart[0].productID).toEqual(productId2);
+    //Intermediate Size Basketball
+    expect(document.querySelector(`.js-product-name-${productId2}`).innerText).toEqual('Intermediate Size Basketball')
+
   });
+  it('checks the price string ',()=>{
+    expect(document.querySelector('.js-product-price').innerText).toContain('$')
+  })
+  it('updates the delivery option',()=>{
+    let input  = document.querySelector(`.js-delivery-option-input${productId1,'3'}`)
+    input.click()
+    expect(input.checked).toBeTrue();
+    expect(cart.length).toEqual(2)
+    expect(cart[0].productID).toEqual(productId1)
+    expect(cart[0].deliveryOptionId).toEqual('3')
+    //cont from the last question of exercise 16j inshAllah
+    
+
+  })
+  it('checks the total amount',()=>{
+    let total = document.querySelector('.js-payment-summary').innerText
+    expect(total).toContain('$ 52.51')
+    console.log(total)
+
+  })    
+
 });

@@ -78,7 +78,7 @@ export function updateDeliveryOption(productID,deliveryOptionId){
     saveToStorage();
   }
   else{
-    console.log('product not found')
+    return;
   }
   
 }
