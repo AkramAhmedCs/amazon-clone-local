@@ -1,12 +1,14 @@
+// the hash makes a property private 
+
 class Cart {
   cartItems;
-  localStorageKey;
+  #localStorageKey;
   constructor(localStorageKey){
-    this.localStorageKey = localStorageKey;
-    this.loadFromStorage();
+    this.#localStorageKey = localStorageKey;
+    this.#loadFromStorage();
   }
-  loadFromStorage() {
-    this.cartItems = JSON.parse(localStorage.getItem(this.localStorageKey));
+  #loadFromStorage() {
+    this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
     if (!this.cartItems) {
       this.cartItems = [{
         productID: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
@@ -20,7 +22,7 @@ class Cart {
     }
   }
   saveToStorage() {
-    localStorage.setItem(this.localStorageKey, JSON.stringify(this.cartItems));
+    localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
   }
   removeFromCart(productID) {
     const newCart = [];
