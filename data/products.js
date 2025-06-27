@@ -49,6 +49,32 @@ class Clothing extends Products{
   
   }
 }
+//const date  = new Date()
+//console.log(date)
+//console.log(date.toLocaleDateString())
+
+
+/*console.log(this)
+
+const object2 = {
+  a: 2,
+  b: this.a
+}*/
+
+/*
+function logThis(){
+  console.log(this)
+}
+logThis()
+logThis.call('hello')
+//arrow functions dont change this value
+const object3 = {
+  method:()=>{
+    console.log(this)
+}
+}
+object3.method()
+*/
  export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -709,7 +735,7 @@ class Clothing extends Products{
     ]
   }
 ].map((productDetails)=>{
-  if(productDetails.type==='clothing'){
+  if(productDetails.type ==='clothing'){
     return new Clothing(productDetails)
   }
   return new Products(productDetails)
