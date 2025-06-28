@@ -28,6 +28,7 @@
       "basketballs"
     ]
   },
+  
   {
     "id": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
     "image": "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
@@ -58,7 +59,10 @@
       "toaster",
       "kitchen",
       "appliances"
-    ]
+    ],
+    "type": "appliance",
+    "instructionsLink": "images/appliance-instructions.png",
+  "warrantyLink": "images/appliance-warranty.png"
   },
   {
     "id": "3ebe75dc-64d2-4137-8860-1f5a963e534b",

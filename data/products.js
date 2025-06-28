@@ -49,32 +49,25 @@ class Clothing extends Products{
   
   }
 }
-//const date  = new Date()
-//console.log(date)
-//console.log(date.toLocaleDateString())
 
+class Appliance extends Products{
+  instructionsLink;
+  warrantyLink;
+  constructor(productDetails){
+    super(productDetails);
+    this.instructionsLink = productDetails.instructionsLink;
+    this.warrantyLink = productDetails.warrantyLink;
 
-/*console.log(this)
-
-const object2 = {
-  a: 2,
-  b: this.a
-}*/
-
-/*
-function logThis(){
-  console.log(this)
 }
-logThis()
-logThis.call('hello')
-//arrow functions dont change this value
-const object3 = {
-  method:()=>{
-    console.log(this)
+extraInfoHtml(){
+  console.log("Rendering appliance extra info!");
+  return `
+    <a href="${this.instructionsLink}" target="_blank">Instructions</a>
+    <a href="${this.warrantyLink}" target="_blank">Warranty</a>
+  `;
 }
+
 }
-object3.method()
-*/
  export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -135,7 +128,10 @@ object3.method()
       "toaster",
       "kitchen",
       "appliances"
-    ]
+    ],
+    type:"appliance",
+    instructionsLink: "images/appliance-instructions.png",
+  warrantyLink: "images/appliance-warranty.png"
   },
   {
     id: "3ebe75dc-64d2-4137-8860-1f5a963e534b",
@@ -738,5 +734,12 @@ object3.method()
   if(productDetails.type ==='clothing'){
     return new Clothing(productDetails)
   }
+  else if(productDetails.type ==='appliance'){
+    return new Appliance(productDetails)
+  }
   return new Products(productDetails)
 });
+
+
+
+
