@@ -1,6 +1,7 @@
 import {cart,addToCart, calculateCartQuantity} from '../data/cart.js';
-import {products} from '../data/products.js';
+import {products,loadProductsFromBackend} from '../data/products.js';
 import { formatMoney } from './utils/money.js';
+loadProductsFromBackend(renderProductsGrid);
 // u can rename the import to whatever u want ex importing cart as myCart
 //with modules u dont have to worry about the order of the script tags in the html file
 //well create an array to contain an array of objects each of which representing a product
@@ -47,74 +48,81 @@ const products = [{
 
 
 //we will just get the products array from the json file 
-let productsHTML = ' ';
-//we multiply the rating by 10 to get the actual rating in the image
-products.forEach((product)=>{
-  productsHTML += `<div class="product-container">
-          <div class="product-image-container">
-            <img class="product-image"
-              src="${product.image}">
-          </div>
 
-          <div class="product-name limit-text-to-2-lines">
-            ${product.name}
-          </div>
 
-          <div class="product-rating-container">
-            <img class="product-rating-stars"
-              src="${product.getStarsUrl()}">
-            <div class="product-rating-count link-primary">
-              ${product.rating.count}
+function renderProductsGrid(){
+
+
+
+  let productsHTML = ' ';
+  //we multiply the rating by 10 to get the actual rating in the image
+  products.forEach((product)=>{
+    productsHTML += `<div class="product-container">
+            <div class="product-image-container">
+              <img class="product-image"
+                src="${product.image}">
             </div>
-          </div>
 
-          <div class="product-price">
-            ${product.getPrice()}
-          </div>
+            <div class="product-name limit-text-to-2-lines">
+              ${product.name}
+            </div>
 
-          <div class="product-quantity-container">
-            <select>
-              <option selected value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-            </select>
-          </div>
-          ${product.extraInfoHtml()}
+            <div class="product-rating-container">
+              <img class="product-rating-stars"
+                src="${product.getStarsUrl()}">
+              <div class="product-rating-count link-primary">
+                ${product.rating.count}
+              </div>
+            </div>
 
-          <div class="product-spacer"></div>
+            <div class="product-price">
+              ${product.getPrice()}
+            </div>
 
-          <div class="added-to-cart">
-            <img src="images/icons/checkmark.png">
-            Added
-          </div>
+            <div class="product-quantity-container">
+              <select>
+                <option selected value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+            ${product.extraInfoHtml()}
 
-          <button class="add-to-cart-button button-primary js-add-to-cart"
-          data-product-id="${product.id}">
-            Add to Cart
-          </button>
-        </div>`;
+            <div class="product-spacer"></div>
 
-});
-//moved add to cart function to the cart file sice it is related to the cart
+            <div class="added-to-cart">
+              <img src="images/icons/checkmark.png">
+              Added
+            </div>
 
-  
-document.querySelector('.js-products-grid').innerHTML = productsHTML;
-updateCartQuantityDisplay();
-document.querySelectorAll('.js-add-to-cart').forEach((button) =>{
-  button.addEventListener('click',()=>{
-   const productID = button.dataset.productId;
-    addToCart(productID);
-        updateCartQuantityDisplay();
-    });
-});
- function updateCartQuantityDisplay() {
-  const quantity = calculateCartQuantity();
-  document.querySelector('.js-cart-quantity').innerHTML = quantity;
+            <button class="add-to-cart-button button-primary js-add-to-cart"
+            data-product-id="${product.id}">
+              Add to Cart
+            </button>
+          </div>`;
+
+  });
+  //moved add to cart function to the cart file sice it is related to the cart
+
+    
+  document.querySelector('.js-products-grid').innerHTML = productsHTML;
+  updateCartQuantityDisplay();
+  document.querySelectorAll('.js-add-to-cart').forEach((button) =>{
+    button.addEventListener('click',()=>{
+    const productID = button.dataset.productId;
+      addToCart(productID);
+          updateCartQuantityDisplay();
+      });
+  });
+  function updateCartQuantityDisplay() {
+    const quantity = calculateCartQuantity();
+    document.querySelector('.js-cart-quantity').innerHTML = quantity;
+  }
 }
