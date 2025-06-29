@@ -1,13 +1,19 @@
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
 import { loadFromStorage, cart } from "../../data/cart.js";
 import { rednderPaymentSummary } from "../../scripts/checkout/paymentSummary.js"; 
-
+import { loadProductsFromBackend } from "../../data/products.js"; 
 
 describe('Test suite: render order summary ', () => {
   // Define productId1 and productId2 in the scope of the describe block
   // so they are available to all 'it' blocks and 'beforeEach'.
   const productId1 = 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6';
   const productId2 = '15b6fc6f-327a-4ec4-896f-486349e85a3d';
+  // we'll use the done function provided by jasmine to wait till the products are retrieved first 
+  beforeAll((done)=>{
+    loadProductsFromBackend(()=>{
+      done();
+    });
+  })
 
   beforeEach(() => {
     spyOn(localStorage, 'setItem'); // This is good for setup before each test
