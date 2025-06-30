@@ -1,7 +1,7 @@
 import { renderOrderSummary } from "./checkout/orderSummary.js";
 import { rednderPaymentSummary } from "./checkout/paymentSummary.js";
 //import '../data/car.js';
-import { loadProductsFromBackend } from "../data/products.js";
+import { loadProductsFromBackend,loadProductsFetch } from "../data/products.js";
 import { loadCartFromBackend } from "../data/cart.js";
 //import '../data/backend-practice.js'
 //import '../data/cart-class.js
@@ -20,12 +20,8 @@ import { loadCartFromBackend } from "../data/cart.js";
 //promise.all allows u to wait for multiple promises to finish at the same time instead of doing them in multiple promises 
 
 Promise.all([
+  loadProductsFetch(),
   new Promise((resolve)=>{
-  loadProductsFromBackend(()=>{
-    resolve('value1');
-  });
-}),
-new Promise((resolve)=>{
     loadCartFromBackend(()=>{
     resolve();
    });

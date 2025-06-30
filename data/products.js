@@ -70,6 +70,40 @@ extraInfoHtml(){
 }
 
 export let products  = []
+
+
+
+export function loadProductsFetch(){
+  const promise  = fetch('https://supersimplebackend.dev/products').then((response)=>{
+    return response.json()
+    //to get the data attached use response.json, whcuh returns another promise
+  }).then((productData)=>{
+    //now we 
+     products = productData.map((productDetails)=>{
+  if(productDetails.type ==='clothing'){
+    return new Clothing(productDetails)
+  }
+  else if(productDetails.type ==='appliance'){
+    return new Appliance(productDetails)
+  }
+  return new Products(productDetails)
+});
+
+
+//the products data is the variable returned by the response.json promise 
+  })
+  //fetch makes a get req by default
+  //calling fetch creates a promise by default, u can use .then()  to do a next step 
+
+
+  return promise;
+  //we returned it to attach a .then() to the promise if we wanna do more things 
+}
+/*
+loadProductsFetch().then(()=>{
+  console.log('next')
+})
+  */
 export function loadProductsFromBackend(fun){
   const xhr = new XMLHttpRequest();
   xhr.addEventListener('load',()=>{
