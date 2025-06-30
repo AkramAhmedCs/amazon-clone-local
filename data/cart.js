@@ -82,3 +82,18 @@ export function updateDeliveryOption(productID,deliveryOptionId){
   }
   
 }
+
+
+export function loadCartFromBackend(fun){
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener('load',()=>{
+    console.log(xhr.response)
+
+    fun();
+
+  });
+  xhr.open('GET','https://supersimplebackend.dev/cart')
+  xhr.send();
+
+  //send is async, so we'll set an event listner to wait till it gets a response 
+}

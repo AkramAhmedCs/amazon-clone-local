@@ -82,7 +82,6 @@ export function loadProductsFromBackend(fun){
   }
   return new Products(productDetails)
 });
-    console.log(products)
 
     fun();
 
