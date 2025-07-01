@@ -91,6 +91,8 @@ export function loadProductsFetch(){
 
 
 //the products data is the variable returned by the response.json promise 
+  }).catch((error)=>{
+    console.log( `${error}`)
   })
   //fetch makes a get req by default
   //calling fetch creates a promise by default, u can use .then()  to do a next step 
@@ -99,6 +101,7 @@ export function loadProductsFetch(){
   return promise;
   //we returned it to attach a .then() to the promise if we wanna do more things 
 }
+loadProductsFetch()
 /*
 loadProductsFetch().then(()=>{
   console.log('next')
@@ -121,11 +124,15 @@ export function loadProductsFromBackend(fun){
 
     //convert it back to a js object
   })
+  xhr.addEventListener('error',(error)=>{
+    console.log('Unexpected error. Please try again later'+error)
+  })
   xhr.open('GET','https://supersimplebackend.dev/products')
   xhr.send();
 
   //send is async, so we'll set an event listner to wait till it gets a response 
 }
+//loadProductsFromBackend();
 
 /*
  export const products = [

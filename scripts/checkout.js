@@ -13,7 +13,11 @@ import { loadCartFromBackend } from "../data/cart.js";
   we use async cuz it allows us to use await which lets us wait for a promise to finish loading 
 */
 async function loadPage() {
-  // console.log('load page');
+  //throw manually creates an error
+  //throw new Error("Error1");
+  
+  try{
+      // console.log('load page');
   await loadProductsFetch();
 
   // if the resolve returns a value, you can just save the function in a variable
@@ -22,6 +26,12 @@ async function loadPage() {
       resolve('value 3');
     });
   });
+  }
+  catch(error){
+    console.log(`${error}`)
+    
+  }
+
 
   renderOrderSummary();
   rednderPaymentSummary();
