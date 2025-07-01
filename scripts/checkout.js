@@ -5,7 +5,6 @@ import { loadProductsFromBackend, loadProductsFetch } from "../data/products.js"
 import { loadCartFromBackend } from "../data/cart.js";
 // import '../data/backend-practice.js'
 // import '../data/cart-class.js
-// '
 
 /*
   async wraps a function in a promise
