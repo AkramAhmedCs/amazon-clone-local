@@ -82,6 +82,7 @@ export function rednderPaymentSummary() {
     } catch (error) {
       console.error("Failed to place order:", error);
     }
+    //this just changes the window location
     window.location.href = 'orders.html'
   });
 
