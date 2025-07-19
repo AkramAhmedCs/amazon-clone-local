@@ -8,7 +8,7 @@ export function calculateDeliveryDate(deliveryOption) {
     deliveryDate = deliveryDate.add(1, 'day');
     const dayOfWeek = deliveryDate.day(); // 0 = Sunday, 6 = Saturday
 
-    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Skip weekends
       daysToAdd--;
     }
   }

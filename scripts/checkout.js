@@ -2,90 +2,70 @@ import { renderOrderSummary } from "./checkout/orderSummary.js";
 import { rednderPaymentSummary } from "./checkout/paymentSummary.js";
 // import '../data/car.js';
 import { loadProductsFromBackend, loadProductsFetch } from "../data/products.js";
-import { loadCartFromBackend } from "../data/cart.js";
+import { loadCartFromBackend, loadCartFetch } from "../data/cart.js";
 // import '../data/backend-practice.js'
-// import '../data/cart-class.js
+// import '../data/cart-class.js'
 
-/*
-  async wraps a function in a promise
-  so you can wait for it to finish using .then or await
-
-  we use async cuz it allows us to use await which lets us wait for a promise to finish loading 
-*/
 async function loadPage() {
-  //throw manually creates an error
-  //throw new Error("Error1");
-  
-  try{
-      // console.log('load page');
-  await loadProductsFetch();
-
-  // if the resolve returns a value, you can just save the function in a variable
-  const value = await new Promise((resolve) => {
-    loadCartFromBackend(() => {
-      resolve('value 3');
-    });
-  });
+  try {
+    await Promise.all([
+     loadProductsFetch(),
+     loadCartFetch()
+    ])
+  } catch (error) {
+    console.log(`${error}`);
   }
-  catch(error){
-    console.log(`${error}`)
-    
-  }
-
 
   renderOrderSummary();
   rednderPaymentSummary();
-
-  // return 'value2'; // this gets saved in a resolve
 }
 
 loadPage();
-
 /*
-  What’s a Promise?
-  - Basically, you wrap anything that might take time inside a Promise to make sure you wait for it to load before moving on to the next step.
-  - resolve is called after the function is done, signaling that the previous async function is done loading (resolved).
-  - You can use .then to chain multiple async functions that wait for one another in order.
-  - You can pass a value to resolve to share it across promises.
-  - resolve is similar to the done function from Jasmine.
-*/
+  --- Async / Await Basics ---
+  - async wraps a function in a promise
+  - allows you to use await to pause code until a promise is resolved
+  - useful for waiting for API calls or long operations before continuing
 
-/*
-  Promise.all:
-  - Allows you to wait for multiple promises to finish at the same time instead of chaining them in multiple .then() blocks.
-*/
+  --- Throwing Errors ---
+  - throw manually creates an error
+  - you can catch it using try/catch blocks
 
-/*
-Promise.all([
-  loadProductsFetch(),
-  new Promise((resolve) => {
-    loadCartFromBackend(() => {
-      resolve();
+  --- What’s a Promise? ---
+  - A Promise wraps anything that might take time (like API calls)
+  - It helps make sure your code waits before moving forward
+  - resolve is called when the async task finishes
+  - resolve can also pass values that get shared with .then()
+
+  --- Promise.all ---
+  - Lets you wait for multiple promises in parallel
+  - Example:
+    Promise.all([
+      loadProductsFetch(),
+      new Promise((resolve) => {
+        loadCartFromBackend(() => {
+          resolve();
+        });
+      })
+    ]).then((values) => {
+      console.log(values);
+      renderOrderSummary();
+      rednderPaymentSummary();
     });
-  })
-]).then((values) => {
-  // values: [value from loadProductsFetch, undefined (because we gave no value to the second resolve)]
-  console.log(values);
-  renderOrderSummary();
-  rednderPaymentSummary();
-});
-*/
 
-/*
-.then((value) => {
-  console.log(value);
-  return;
-}).then(() => {
-
-})
-*/
-
-/*
-Alternative nested callback version:
-loadProductsFromBackend(() => {
-  loadCartFromBackend(() => {
-    renderOrderSummary();
-    rednderPaymentSummary();
+  --- Old School (Nested Callback Style) ---
+  loadProductsFromBackend(() => {
+    loadCartFromBackend(() => {
+      renderOrderSummary();
+      rednderPaymentSummary();
+    });
   });
-});
+
+  --- .then Chaining Example ---
+  .then((value) => {
+    console.log(value);
+    return;
+  }).then(() => {
+    // next action
+  });
 */
