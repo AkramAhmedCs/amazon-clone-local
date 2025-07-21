@@ -1,62 +1,52 @@
 import {cart,addToCart, calculateCartQuantity} from '../data/cart.js';
 import {products,loadProductsFromBackend} from '../data/products.js';
 import { formatMoney } from './utils/money.js';
+
+// Read URL parameters for search functionality
+const urlParams = new URLSearchParams(window.location.search);
+const searchTerm = urlParams.get('search');
+
 loadProductsFromBackend(renderProductsGrid);
-// u can rename the import to whatever u want ex importing cart as myCart
-//with modules u dont have to worry about the order of the script tags in the html file
-//well create an array to contain an array of objects each of which representing a product
-/*
-const products = [{
-  image : 'images/products/athletic-cotton-socks-6-pairs.jpg',
-  name :'Black and Gray Athletic Cotton Socks - 6 Pairs',
-  rating :{
-    stars : 4.5,
-    count : 87
-  },
-  priceInCents : 1090
-},
-{
-  image:'images/products/intermediate-composite-basketball.jpg',
-  name:'Intermediate Composite Basketball',
-  rating:{
-    stars:4,
-    count:127
-  },
-  priceInCents:2095
-},
-{
-  image:'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-  name:'Adults Plain Cotton T-Shirt - 2 Pack - Teal',
-  rating:{
-    stars:4.5,
-    count:56
-  },
-  priceInCents:799
-},
-{
-  image:'images/products/black-2-slot-toaster.jpg',
-  name:' 2 Slot Toaster-black',
-  rating:{
-    stars:5,
-    count:2197
-  },
-  priceInCents:1899
-}
-
-];
-*/
-
-
-//we will just get the products array from the json file 
-
 
 function renderProductsGrid(){
-
-
+  // Start with all products
+  let productsToShow = products;
+  
+  // If there's a search term, filter the products
+  if (searchTerm){
+    console.log('Searching for:', searchTerm); // DEBUG
+    console.log('Total products before filter:', products.length); // DEBUG
+    
+    productsToShow = products.filter(product => {
+      const searchLower = searchTerm.toLowerCase();
+      
+      // Check if product name contains search term
+      const nameMatch = product.name.toLowerCase().includes(searchLower);
+      
+      // Check if any keyword contains search term (with safety check for undefined keywords)
+      const keywordMatch = product.keywords && product.keywords.some(keyword => 
+        keyword.toLowerCase().includes(searchLower)
+      );
+      
+      // DEBUG: Log each product's match status
+      console.log(`Product: ${product.name}`);
+      console.log(`  Name match: ${nameMatch}`);
+      console.log(`  Has keywords: ${!!product.keywords}`);
+      console.log(`  Keywords: ${product.keywords}`);
+      console.log(`  Keyword match: ${keywordMatch}`);
+      console.log(`  Overall match: ${nameMatch || keywordMatch}`);
+      
+      // Return true if either name OR keywords match
+      return nameMatch || keywordMatch;
+    });
+    
+    console.log('Products after filter:', productsToShow.length); // DEBUG
+  }
 
   let productsHTML = ' ';
-  //we multiply the rating by 10 to get the actual rating in the image
-  products.forEach((product)=>{
+  
+  // Generate HTML for each product (filtered or all)
+  productsToShow.forEach((product)=>{
     productsHTML += `<div class="product-container">
             <div class="product-image-container">
               <img class="product-image"
@@ -107,22 +97,100 @@ function renderProductsGrid(){
               Add to Cart
             </button>
           </div>`;
-
   });
-  //moved add to cart function to the cart file sice it is related to the cart
 
-    
+  // Update the DOM with the generated HTML
   document.querySelector('.js-products-grid').innerHTML = productsHTML;
   updateCartQuantityDisplay();
+  
+  // Add event listeners to all "Add to Cart" buttons
   document.querySelectorAll('.js-add-to-cart').forEach((button) =>{
     button.addEventListener('click',()=>{
-    const productID = button.dataset.productId;
+      const productID = button.dataset.productId;
       addToCart(productID);
-          updateCartQuantityDisplay();
-      });
+      updateCartQuantityDisplay();
+    });
   });
+  
   function updateCartQuantityDisplay() {
     const quantity = calculateCartQuantity();
     document.querySelector('.js-cart-quantity').innerHTML = quantity;
   }
 }
+
+/*
+=== README: How the Search Functionality Works ===
+
+## Overview
+This code implements a search feature that filters products based on user input. Users can search by product name or keywords, and the page will display only matching products.
+
+## How It Works
+
+### 1. URL Parameter Reading
+```javascript
+const urlParams = new URLSearchParams(window.location.search);
+const searchTerm = urlParams.get('search');
+```
+- When the page loads, it checks the URL for a search parameter
+- Example: `amazon.html?search=basketball` → searchTerm = "basketball"
+- If no search parameter exists, searchTerm = null
+
+### 2. Product Filtering
+```javascript
+if (searchTerm){
+  productsToShow = products.filter(product => {
+    // Filter logic here
+  });
+}
+```
+- If a search term exists, filter the products array
+- If no search term, show all products
+- Uses Array.filter() to create a new array with only matching products
+
+### 3. Search Logic
+The search checks two things:
+- **Product Name**: Does the product name contain the search term?
+- **Keywords**: Do any of the product's keywords contain the search term?
+
+### 4. Safety Check
+```javascript
+const keywordMatch = product.keywords && product.keywords.some(keyword => 
+  keyword.toLowerCase().includes(searchLower)
+);
+```
+- Uses `&&` to check if keywords exist before calling .some()
+- Prevents "Cannot read properties of undefined" error
+- If keywords don't exist, keywordMatch becomes false
+
+### 5. Case-Insensitive Search
+```javascript
+const searchLower = searchTerm.toLowerCase();
+product.name.toLowerCase().includes(searchLower)
+```
+- Converts both search term and product data to lowercase
+- Makes search case-insensitive: "Basketball" matches "basketball"
+
+## Example Flow
+1. User types "sports" in search bar
+2. Search button redirects to: `amazon.html?search=sports`
+3. Page loads, reads "sports" from URL
+4. Filters products where:
+   - Name contains "sports" OR
+   - Any keyword contains "sports"
+5. Displays only matching products
+
+## Product Data Structure Expected
+```javascript
+{
+  "id": "...",
+  "name": "Product Name",
+  "keywords": ["keyword1", "keyword2"], // Optional - can be missing
+  // ... other properties
+}
+```
+
+## Error Prevention
+- Handles products without keywords property
+- Uses safe navigation with && operator
+- Case-insensitive matching prevents missed results
+*/

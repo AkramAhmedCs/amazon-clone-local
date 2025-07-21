@@ -5,40 +5,32 @@ import { getDeliveryOption } from '../data/deliveryOptions.js';
 import { calculateDeliveryDate } from './utils/deliveryOptipns.js';
 import { addToCart } from '../data/cart.js';
 
-// This function runs when the script loads to ensure products are fetched
-// before attempting to render the orders HTML.
 async function run() {
   console.log('run() function executed.');
-  await loadProductsFetch(); // Make sure product data is available
-  createOrdersHtml(); // Generate and render orders HTML
+  await loadProductsFetch();
+  createOrdersHtml();
 }
 run();
 
-/**
- * Generates and displays the HTML for all orders
- */
 export async function createOrdersHtml() {
-  let ordersHtml = ''; // Accumulate all orders' HTML here
+  let ordersHtml = '';
 
-  // Loop over each order in the 'orders' array
   for (const order of orders) {
     if (order === null) continue;
 
-    let productsHtml = ''; // Accumulate HTML for each product inside the current order
+    let productsHtml = '';
 
-    // Loop through each product in the order
     order.products.forEach((productItem) => {
-      const matchingProduct = getProduct(productItem.productId); // Get full product details
+      const matchingProduct = getProduct(productItem.productId);
 
       if (!matchingProduct) {
         console.warn("Missing product details for product ID:", productItem.productId, "in order:", order.id);
         return;
       }
 
-      const deliveryOption = getDeliveryOption(productItem.deliveryOptionId); // Get delivery info
-      const deliveryDate = calculateDeliveryDate(deliveryOption); // Calculate delivery date
+      const deliveryOption = getDeliveryOption(productItem.deliveryOptionId);
+      const deliveryDate = calculateDeliveryDate(deliveryOption);
 
-      // Build HTML for one product inside the order
       productsHtml += `
         <div class="order-details-grid items-center p-4 bg-white rounded-lg shadow-md mb-4">
           <div class="flex-none w-24 h-24 product-image-container">
@@ -58,7 +50,10 @@ export async function createOrdersHtml() {
               <img class="buy-again-icon w-6 h-6 mr-2" src="images/icons/buy-again.png" alt="Buy Again Icon">
               <span class="buy-again-message">Buy it again</span>
             </button>
-            <button class="track-package-button bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors">
+            <button 
+              class="track-package-button js-track-package bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors"
+              data-order-id="${order.id}" 
+              data-product-id="${productItem.productId}">
               Track Package
             </button>
           </div>
@@ -66,7 +61,6 @@ export async function createOrdersHtml() {
       `;
     });
 
-    // Build the full order container HTML
     ordersHtml += `
       <div class="order-container bg-gray-100 p-6 rounded-lg shadow-lg mb-8">
         <div class="order-header flex flex-col md:flex-row justify-between items-center bg-gray-200 p-4 rounded-t-lg mb-4">
@@ -92,15 +86,21 @@ export async function createOrdersHtml() {
     `;
   }
 
-  // Inject the complete HTML into the DOM
   document.querySelector('.js-order-grid').innerHTML = ordersHtml;
   console.log('Orders HTML generated and displayed successfully.');
 
-  // Attach "Buy it again" click listeners after the HTML is added
   document.querySelectorAll('.js-buy-again').forEach(button => {
     button.addEventListener('click', () => {
       const productId = button.dataset.productId;
       addToCart(productId);
+    });
+  });
+
+  document.querySelectorAll('.js-track-package').forEach(button => {
+    button.addEventListener('click', () => {
+      const orderId = button.dataset.orderId;
+      const productId = button.dataset.productId;
+      window.location.href = `tracking.html?orderId=${orderId}&productId=${productId}`;
     });
   });
 }

@@ -60,5 +60,28 @@
     we need to make the imports at the top of the file
     -->
     <script type="module" src="scripts/amazon.js"></script>
+    <script type="module" src="scripts/amazon.js"></script>
+<script>
+  // Add search button functionality
+  document.querySelector('.search-button').addEventListener('click', () => {
+    const searchInput = document.querySelector('.search-bar');
+    //trim removes extra spaces
+    const searchTerm = searchInput.value.trim();
+    
+    //if there is something in the search go to it ex amazon.html?search=basketball
+    if (searchTerm) {
+      window.location.href = `amazon.html?search=${encodeURIComponent(searchTerm)}`;
+    } else {
+      window.location.href = 'amazon.html';
+    }
+  });
+
+  // Also allow Enter key to search
+  document.querySelector('.search-bar').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      document.querySelector('.search-button').click();
+    }
+  });
+</script>
   </body>
 </html>
